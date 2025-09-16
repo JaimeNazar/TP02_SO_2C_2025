@@ -10,6 +10,7 @@
 #include <time.h>
 #include <registers.h>
 #include <interrupts.h>
+#include <styledConsole.h>
 
 // Syscalls IDs
 enum{
@@ -33,8 +34,8 @@ enum{
     ID_DUMP_REGS,
 };
 
-#define COLOR_WHITE 0xFFFFFFFF
-#define COLOR_AMBER 0x00FFBF00
+#define COLOR_WHITE 0x0F
+#define COLOR_RED 0x0C
 
 int syscallWrite(int fd, const char * buff, int length);
 int syscallRead(int fd, char * buff, int length);

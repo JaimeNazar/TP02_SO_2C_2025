@@ -5,11 +5,11 @@ int syscallWrite(int fd, const char * buff, int length) {
     // Output style depends on file descriptor
     switch (fd) {
         case 1:
-            videoPrintText(buff, length, COLOR_WHITE);
+	        scPrintAmount(buff, length, COLOR_WHITE);
             break;
 
         case 2:
-            videoPrintText(buff, length, COLOR_AMBER);
+            scPrintAmount(buff, length, COLOR_RED);
             break;
     };
 
@@ -29,7 +29,7 @@ int syscallRead(int fd, char * buff, int length) {
                 
                 if (current == '\n') { // Enter
                     buff[count++] = '\n';
-                    videoNextLine();
+                    scNewline();
                     break; // Stop reading on Enter
 
                 } else if(current == '\b' && count >= 0) { // Backspace
@@ -39,8 +39,7 @@ int syscallRead(int fd, char * buff, int length) {
                     buff[count++] = current;
                 }
 
-                videoDrawChar(current, COLOR_WHITE);
-                videoDrawScreen();
+                scPrintChar(current, COLOR_WHITE);
 
             }
         break;

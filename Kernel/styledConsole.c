@@ -8,6 +8,14 @@ static uint8_t * currentVideo = (uint8_t*)0xB8000;
 static const uint32_t width = 80;
 static const uint32_t height = 25 ;
 
+void scPrintAmount(const char * string, int len, uint8_t color)
+{
+	int i;
+
+	for (i = 0; string[i] != 0 || i < len; i++)
+		scPrintChar(string[i], color);
+}
+
 void scPrint(const char * string, uint8_t color)
 {
 	int i;
@@ -45,12 +53,35 @@ void scPrintChar(char character, uint8_t color)
 	currentVideo++;
 }
 
-void scPrintCharAt(char character, uint8_t color, int x, int y)
+void scPrintCharAt(char c, uint8_t color, int x, int y)
 {
 	if (currentVideo >= video + (height-1) * width*2)
 		scScrollDown();
+	if(c=='\n') {
 
-	video[y*width*2 + x*2] = character;
+		// Ir al comienzo de la siguiente linea
+        scNewline();
+        
+        return;
+    }
+    if(c=='\b') {
+        if(currentVideo == video) {
+            return; // Cannot erase, do nothing
+        }
+
+        currentVideo--;
+        
+        return;
+    }
+    if(c=='\t') {
+        if(currentVideo + 4 >= video + height * width) {
+            return;
+        } 
+        currentVideo += 4; // Move to next tab position
+        return;
+    }
+
+	video[y*width*2 + x*2] = c;
 	video[y*width*2 + x*2 + 1] = color;
 }
 

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+void scPrintAmount(const char * string, int len, uint8_t color);
 void scPrint(const char * string, uint8_t color);
 void scPrintChar(char character, uint8_t color);
 void scNewline();

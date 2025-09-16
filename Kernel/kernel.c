@@ -94,9 +94,6 @@ int main()
 
 	// Change timer tick to 10ms
 	timer_set(10);
-
-	// Initialize video variables now that the video structure is loaded
-	videoInitialize();
 	
 	// Go to user space
 	((EntryPoint)userCodeModuleAddress)();
