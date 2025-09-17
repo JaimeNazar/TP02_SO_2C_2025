@@ -4,13 +4,11 @@ static char *commandList[] = {
     "help",
     "clear",
     "sleep",
-    "game",
     "time",
     "beep",
     "ticks",
     "echo",
     "registers",
-    "font-size",
     "zero-division",
     "undefined-op-code"
 };
@@ -19,13 +17,11 @@ char *commandListDescription[] = {
     " - Shows this help message",
     " - Clears the screen",
     " - Puts the system to sleep for a specified amount of ticks",
-    " - Starts the game",
     " - Shows the current time",
     " - Makes a beep sound for a specified frecuency and time",
     " - Displays the number of ticks elapsed since system start",
     " - Echoes the input back to the user",
     " - Shows the current values of each register",
-    " - Changes system font size, size must be greater than or equal 8",
     " - Tests the division by zero exception",
     " - Tests the invalid operation code Exception"
 };
@@ -35,13 +31,11 @@ static const int argumentsPerCommand[] = {
     0, // help
     0, // clear
     1, // sleep
-    1, // game
     0, // time
     2, // beep
     0, // ticks
     0, // echo, special case
     0, // registers
-    1,  // font size
     0,  // test zero
     0  // test operation code
 };
@@ -51,13 +45,11 @@ enum{
     HELP = 0,
     CLEAR,
     SLEEP,
-    GAME,
     TIME,
     BEEP,
     TICKS,
     ECHO,
     REGISTERS,
-    FONT_SIZE,
     ZERO_DIVISION,
     INVALID_OPCODE
 };
@@ -134,12 +126,6 @@ void commandHandler(char* command, int length) {
             }
             else{sleepCommand(arg);}                  
             break;
-        case GAME:
-            int players = strToInt(arguments[1]);
-            if (players != 1 && players != 2){
-                errorInvalidArgument(arguments[1]);
-            } else {gameCommand(players);}
-            break;
         case TIME: 
             timeCommand();
             break;
@@ -160,15 +146,6 @@ void commandHandler(char* command, int length) {
             break;
         case REGISTERS: 
             registersCommand();
-            break;
-        case FONT_SIZE:
-            int size = strToInt(arguments[1]);
-            if (size < MIN_FONT_SIZE || size >= MAX_FONT_SIZE){
-                errorInvalidArgument(arguments[1]);
-            } else {
-                setFontSize(size); // Update font size 
-                fontCommand(size);
-            }
             break;
         case ZERO_DIVISION: 
             testZeroCommand();

@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <registers.h>
-#include <videoDriver.h>
 #include <interrupts.h>
 
 #define BUFFER_SIZE 5

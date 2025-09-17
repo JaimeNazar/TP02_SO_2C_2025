@@ -5,7 +5,6 @@
 #include <stdarg.h>
 
 #include <keyboard.h>
-#include <videoDriver.h>
 #include <soundDriver.h>
 #include <time.h>
 #include <registers.h>
@@ -16,11 +15,7 @@
 enum{
     ID_WRITE=0,
     ID_READ,
-    ID_CLEAR_BUFFER,
-    ID_DRAW_SCREEN,
-    ID_DRAW_BITMAP,
-    ID_CONFIG_BITMAP,
-    ID_FONT_SIZE,
+    ID_CLEAR_SCREEN,
     ID_DRAW_TEXT,
     ID_VIDEO_WIDTH,
     ID_VIDEO_HEIGHT,

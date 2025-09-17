@@ -8,20 +8,37 @@ static uint8_t * currentVideo = (uint8_t*)0xB8000;
 static const uint32_t width = 80;
 static const uint32_t height = 25 ;
 
-void scPrintAmount(const char * string, int len, uint8_t color)
-{
+static int strlen(char *buffer) {
+	int count = 0;
+	while(buffer[count++] != 0);
+
+	return count - 1;
+}
+
+void scPrint(const char * string, int len, uint8_t color) {
 	int i;
 
 	for (i = 0; string[i] != 0 || i < len; i++)
 		scPrintChar(string[i], color);
 }
 
-void scPrint(const char * string, uint8_t color)
-{
+void scPrintAt(const char * string, int len, uint8_t color, uint32_t x, uint32_t y) {
+	if (x >= width || y >= height)
+		return ;
+
+	// Save the position it was before
+	uint8_t * aux = currentVideo;
+
+	// Compute the specified position
+	currentVideo = video + y*width + x;
+
 	int i;
 
 	for (i = 0; string[i] != 0; i++)
 		scPrintChar(string[i], color);
+
+	// Restore the position of the cursos
+	currentVideo = aux;
 }
 
 void scScrollDown() {
@@ -42,21 +59,11 @@ void scScrollDown() {
 }
 
 // Upper 4 bits are background color and lower 4 bits are character color
-void scPrintChar(char character, uint8_t color)
+void scPrintChar(char c, uint8_t color)
 {
 	if (currentVideo >= video + (height-1) * width*2)
 		scScrollDown();
 
-	*currentVideo = character;
-	currentVideo++;
-	*currentVideo = color;
-	currentVideo++;
-}
-
-void scPrintCharAt(char c, uint8_t color, int x, int y)
-{
-	if (currentVideo >= video + (height-1) * width*2)
-		scScrollDown();
 	if(c=='\n') {
 
 		// Ir al comienzo de la siguiente linea
@@ -64,15 +71,7 @@ void scPrintCharAt(char c, uint8_t color, int x, int y)
         
         return;
     }
-    if(c=='\b') {
-        if(currentVideo == video) {
-            return; // Cannot erase, do nothing
-        }
-
-        currentVideo--;
-        
-        return;
-    }
+    
     if(c=='\t') {
         if(currentVideo + 4 >= video + height * width) {
             return;
@@ -80,6 +79,34 @@ void scPrintCharAt(char c, uint8_t color, int x, int y)
         currentVideo += 4; // Move to next tab position
         return;
     }
+
+	if(c=='\b') {
+        if(currentVideo == video) {
+            return; // Cannot erase, do nothing
+        }
+
+        currentVideo -= 2;	// Retroceder y pisar el caracter anterior
+
+		*currentVideo = 0x00;
+		currentVideo++;
+		*currentVideo = color;
+		currentVideo++;
+
+		currentVideo -= 2;	// Volver hacia atras
+
+		return;
+    }
+
+	*currentVideo = c;
+	currentVideo++;
+	*currentVideo = color;
+	currentVideo++;
+}
+
+void scPrintCharAt(char c, uint8_t color, uint32_t x, uint32_t y)
+{
+	if (x >= width || y >= height)
+		return ;
 
 	video[y*width*2 + x*2] = c;
 	video[y*width*2 + x*2 + 1] = color;
@@ -112,7 +139,7 @@ void scPrintBin(uint64_t value, uint8_t color)
 void scPrintBase(uint64_t value, uint32_t base, uint8_t color)
 {
     uintToBase(value, buffer, base);
-    scPrint(buffer, color);
+    scPrint(buffer, strlen(buffer), color);
 }
 
 void scClear()
@@ -157,4 +184,13 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 	}
 
 	return digits;
+}
+
+
+uint32_t scGetWidth() {
+	return width;
+}
+
+uint32_t scGetHeight() {
+	return height;
 }

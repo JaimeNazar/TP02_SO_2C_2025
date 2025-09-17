@@ -290,11 +290,7 @@ uint64_t sysTimeTicks(){
 }
 
 void sysClear() {
-    syscall_wizard(ID_CLEAR_BUFFER, NO_ARG, NO_ARG, NO_ARG, NO_ARG, NO_ARG);
-}
-
-void sysDraw() {
-    syscall_wizard(ID_DRAW_SCREEN, NO_ARG, NO_ARG, NO_ARG, NO_ARG, NO_ARG);
+    syscall_wizard(ID_CLEAR_SCREEN, NO_ARG, NO_ARG, NO_ARG, NO_ARG, NO_ARG);
 }
 
 uint64_t sysTime(int arg) {
@@ -313,14 +309,6 @@ void sysBeep(int freq, int duration) {
     syscall_wizard(ID_BEEP, freq, duration, NO_ARG, NO_ARG, NO_ARG);
 }
 
-void sysDrawBitmap(uint64_t x, uint64_t y,uint32_t *bitmap) {
-    syscall_wizard(ID_DRAW_BITMAP, x, y, (uint64_t)bitmap, NO_ARG, NO_ARG);
-}
-
-void sysConfigBitmap(int bitmapSize,uint32_t hexColor,int width){
-    syscall_wizard(ID_CONFIG_BITMAP, bitmapSize, hexColor, width, NO_ARG, NO_ARG);
-}
-
 uint64_t sysGetScreenWidth() {
     return syscall_wizard(ID_VIDEO_WIDTH, NO_ARG, NO_ARG, NO_ARG, NO_ARG, NO_ARG);
 }
@@ -331,10 +319,6 @@ uint64_t sysGetScreenHeight() {
 
 void sysRegisters(int fd) {
     syscall_wizard(ID_DUMP_REGS, fd, NO_ARG, NO_ARG, NO_ARG, NO_ARG);
-}
-
-void sysFontSize(int size) {
-    syscall_wizard(ID_FONT_SIZE, size, NO_ARG, NO_ARG, NO_ARG, NO_ARG);
 }
 
 void sysDrawTextAt(const char * str, int length, uint64_t x, uint64_t y, uint32_t hexColor) {

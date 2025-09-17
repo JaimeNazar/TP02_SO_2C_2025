@@ -18,11 +18,7 @@
 enum{
     ID_WRITE=0,
     ID_READ,
-    ID_CLEAR_BUFFER,
-    ID_DRAW_SCREEN,
-    ID_DRAW_BITMAP,
-    ID_CONFIG_BITMAP,
-    ID_FONT_SIZE,
+    ID_CLEAR_SCREEN,
     ID_DRAW_TEXT,
     ID_VIDEO_WIDTH,
     ID_VIDEO_HEIGHT,
@@ -62,9 +58,6 @@ uint64_t sysWrite(int fd, const char * buff, int length);
 uint64_t sysRead(int fd, char * buff, int length);
 
 void sysClear();
-void sysDraw();
-void sysConfigBitmap(int bitmapSize,uint32_t hexColor,int width);
-void sysDrawBitmap(uint64_t x, uint64_t y,uint32_t *bitmap);
 void sysFontSize(int size);
 uint64_t sysGetScreenWidth();
 uint64_t sysGetScreenHeight();

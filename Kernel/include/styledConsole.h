@@ -3,8 +3,14 @@
 
 #include <stdint.h>
 
-void scPrintAmount(const char * string, int len, uint8_t color);
-void scPrint(const char * string, uint8_t color);
+/*
+ * Print text in specified position
+ * Then it goes back to the position it was printing before
+ */
+void scPrintAt(const char * string, int len, uint8_t color, uint32_t x, uint32_t y);
+
+
+void scPrint(const char * string, int len, uint8_t color);
 void scPrintChar(char character, uint8_t color);
 void scNewline();
 void scPrintDec(uint64_t value, uint8_t color);
@@ -13,6 +19,9 @@ void scPrintBin(uint64_t value, uint8_t color);
 void scPrintBase(uint64_t value, uint32_t base, uint8_t color);
 void scClear();
 void scScrollDown();
-void scPrintCharAt(char character, uint8_t color, int x, int y);
+void scPrintCharAt(char character, uint8_t color, uint32_t x, uint32_t y);
+
+uint32_t scGetWidth();
+uint32_t scGetHeight();
 
 #endif

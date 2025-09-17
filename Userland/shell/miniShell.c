@@ -1,15 +1,12 @@
 #include <miniShell.h>
 
-static int fontSize = MIN_FONT_SIZE;
 static char buffer[128];
 
 void shellInit() {
 
-	sysFontSize(fontSize);
+	sysClear();
 
     sysWrite(1, "miniShell > ", strlen("miniShell > "));
-
-    sysDraw();
 
 	int lastTime = sysTimeTicks();
 	int deltaTime = 0;
@@ -33,18 +30,10 @@ void shellUpdate() {
     int realLen = sysRead(1, buffer, 128);	//Reads 128 caracter
 
 	sysWrite(1, "\n", 1);	// Move one line down
-	sysDraw();
 
     commandHandler(buffer, realLen);	//Checks if it's a command and executes it
 
     sysWrite(1, "miniShell > ", strlen("miniShell > "));
-    
-    sysDraw();
-}
-
-
-void setFontSize(int size) {
-	fontSize = size;
 }
 
 // ------ COMMANDS ------
@@ -68,13 +57,6 @@ void clearCommand() {
 
 void sleepCommand(int duration) {
 	sysSleep(duration);
-}
-
-void gameCommand(int players) {
-	pongis(players);
-
-	// Restore font size
-	sysFontSize(fontSize);
 }
 
 void timeCommand() {
@@ -112,14 +94,6 @@ void registersCommand(){
 	sysWrite(1, "\n", 1);
 	sysRegisters(1);
 }
-
-void fontCommand(int size) {
-	sysClear();
-
-	sysFontSize(size);
-
-}
-
 
 void testZeroCommand() {
 	float a = 10 / 0;

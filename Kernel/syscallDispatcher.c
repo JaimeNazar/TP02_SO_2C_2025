@@ -5,11 +5,11 @@ int syscallWrite(int fd, const char * buff, int length) {
     // Output style depends on file descriptor
     switch (fd) {
         case 1:
-	        scPrintAmount(buff, length, COLOR_WHITE);
+	        scPrint(buff, length, COLOR_WHITE);
             break;
 
         case 2:
-            scPrintAmount(buff, length, COLOR_RED);
+            scPrint(buff, length, COLOR_RED);
             break;
     };
 
@@ -84,12 +84,8 @@ uint64_t syscallDispatcher(uint64_t rax, ...) {
             ret_val = syscallRead(fd, buff, length);
             break;
 
-        case ID_CLEAR_BUFFER:
-            videoClearBuffer();
-            break;
-
-        case ID_DRAW_SCREEN:
-            videoDrawScreen();
+        case ID_CLEAR_SCREEN:
+            scClear();
             break;
 
         case ID_TIME_TICKS:
@@ -117,34 +113,12 @@ uint64_t syscallDispatcher(uint64_t rax, ...) {
 
         case ID_PUT_CHAR:
             char c = va_arg(args, int);
-            videoDrawChar((char)c, COLOR_WHITE);
-            break;
-
-        case ID_DRAW_BITMAP: 
-            uint64_t x = va_arg(args, uint64_t);
-            uint64_t y = va_arg(args, uint64_t);
-            uint32_t *bitmap = va_arg(args, uint32_t*);
-
-            videoDrawBitMap( x, y,bitmap);
-            break;
-
-        case ID_CONFIG_BITMAP:
-            int bitmapPixelSize = va_arg(args, int);
-            uint32_t hexColor = va_arg(args, uint32_t);
-            int width = va_arg(args, int);
-            videoConfigBitmap(bitmapPixelSize, hexColor, width);
-
+            scPrintChar((char)c, COLOR_WHITE);
             break;
 
         case ID_DUMP_REGS:
             int fdDump = va_arg(args, int);
             registersDump(fdDump);
-
-            break;
-
-        case ID_FONT_SIZE:
-            int fontSize = va_arg(args, int);
-            videoSetFontsize(fontSize);
 
             break;
 
@@ -155,17 +129,17 @@ uint64_t syscallDispatcher(uint64_t rax, ...) {
             uint64_t posY = va_arg(args, uint64_t);
             uint32_t textColor = va_arg(args, uint32_t);
 
-            videoDrawTextAt(str, lenght, posX, posY, textColor);
+            scPrintAt(str, lenght, textColor, posX, posY);
 
             break;
         case ID_GET_KEY_EVENT:
             ret_val = keyboardGetKeyEvent();
             break;
         case ID_VIDEO_WIDTH:
-            ret_val = videoGetWidth();
+            ret_val = scGetWidth();
             break;
         case ID_VIDEO_HEIGHT:
-            ret_val = videoGetHeight();
+            ret_val = scGetHeight();
             break;
 
         default:

@@ -11,8 +11,7 @@ LOADEROBJECT=$(LOADERSRC:.asm=.o)
 STATICLIBS=
 
 SOURCES = $(wildcard *.c) \
-          $(wildcard shell/*.c) \
-          $(wildcard pongis/*.c)
+          $(wildcard shell/*.c)
 
 all:$(MODULE) userDataModule 
 
@@ -20,7 +19,7 @@ $(MODULE): $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM)
 	$(LD) $(LDFLAGS) -T userCodeModule.ld -o $(MODULE) $(OBJECTS) $(OBJECTS_ASM) $(STATICLIBS)
 
 %.o: %.c
-	$(GCC) $(GCCFLAGS) -I./include -I./shell/include -I./pongis/include -c $< -o $@
+	$(GCC) $(GCCFLAGS) -I./include -I./shell/include -c $< -o $@
 
 %.o : %.asm
 	$(ASM) $(ASMFLAGS) $< -o $@
